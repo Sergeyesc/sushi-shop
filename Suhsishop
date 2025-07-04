@@ -1,0 +1,750 @@
+Sergey Esc, [04.07.2025 21:39]
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🍣 Sushi Shop — Магазин суши</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<header>
+  <div class="container header-container">
+    <div class="logo">🍣 Sushi Shop</div>
+    <nav>
+      <ul>
+        <li><a href="#menu" class="nav-link">Меню</a></li>
+        <li><a href="#about" class="nav-link">О нас</a></li>
+        <li><a href="#contact" class="nav-link">Контакты</a></li>
+        <li><button id="btn-register" class="btn btn-outline">Зарегистрироваться</button></li>
+        <li><button id="btn-cart" class="btn btn-primary">Корзина (<span id="cart-count">0</span>)</button></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section id="hero">
+  <div class="container hero-container">
+    <h1>Лучшие суши в городе</h1>
+    <p>Свежие роллы и сеты с доставкой на дом</p>
+    <button class="btn btn-primary" onclick="scrollToSection('menu')">Посмотреть меню</button>
+  </div>
+</section>
+
+<section id="menu" class="container">
+  <h2>Меню</h2>
+  <div class="cards" id="menu-items">
+    <!-- Меню динамически вставится сюда -->
+  </div>
+</section>
+
+<section id="about" class="container">
+  <h2>О нас</h2>
+  <p>Мы — семейный магазин суши с многолетним опытом. Используем только свежие продукты и лучшие рецепты.</p>
+</section>
+
+<section id="contact" class="container">
+  <h2>Контакты</h2>
+  <p>Телефон: 8 (953) 295-45-55</p>
+  <form id="contact-form">
+    <input type="text" placeholder="Имя" required />
+    <input type="tel" placeholder="Телефон" required />
+    <button type="submit" class="btn btn-primary">Отправить</button>
+  </form>
+</section>
+
+<!-- Модальные окна -->
+
+<!-- Модальное окно корзины -->
+<div id="cart-modal" class="modal hidden">
+  <div class="modal-content">
+    <span class="close" id="close-cart">&times;</span>
+    <h3>Корзина</h3>
+    <div id="cart-items"></div>
+    <div class="cart-total">Итого: <span id="cart-total">0</span> ₽</div>
+    <button id="btn-order" class="btn btn-primary">Заказать</button>
+  </div>
+</div>
+
+<!-- Модальное окно регистрации -->
+<div id="register-modal" class="modal hidden">
+  <div class="modal-content">
+    <span class="close" id="close-register">&times;</span>
+    <h3>Регистрация</h3>
+    <form id="register-form">
+      <input type="text" placeholder="Имя" required />
+      <input type="email" placeholder="Email" required />
+      <input type="password" placeholder="Пароль" required />
+      <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+    </form>
+  </div>
+</div>
+
+<!-- Модальное окно заказа -->
+<div id="order-modal" class="modal hidden">
+  <div class="modal-content">
+    <span class="close" id="close-order">&times;</span>
+    <h3>Оформление заказа</h3>
+    <form id="order-form">
+      <input type="text" placeholder="Имя" required />
+      <input type="tel" placeholder="Телефон" required />
+      <textarea placeholder="Адрес доставки" required></textarea>
+      <button type="submit" class="btn btn-primary">Подтвердить заказ</button>
+    </form>
+  </div>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
+css/style.css
+css
+Копировать
+Редактировать
+/* Сброс стилей */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #fff8f0;
+  color: #333;
+  line-height: 1.6;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Хедер */
+header {
+  background-color: #d33;
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  color: #fff;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+Sergey Esc, [04.07.2025 21:39]
+nav ul li a,
+nav ul li button {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover,
+nav ul li button:hover {
+  background-color: #ffcccb;
+  color: #b22;
+}
+
+/* Кнопки */
+.btn {
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: 700;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #d33;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+}
+
+.btn-primary:hover {
+  background-color: #b22;
+}
+
+.btn-outline {
+  background: none;
+  border: 2px solid #fff;
+  color: #fff;
+  padding: 0.4rem 1rem;
+}
+
+.btn-outline:hover {
+  background-color: #fff;
+  color: #d33;
+}
+
+/* Hero */
+#hero {
+  background: url('../images/hero-bg.jpg') no-repeat center/cover;
+  height: 350px;
+  color: white;
+  text-align: center;
+  padding-top: 100px;
+  text-shadow: 1px 1px 5px #000;
+}
+
+#hero h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+#hero p {
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Меню */
+#menu h2 {
+  text-align: center;
+  margin: 2rem 0;
+  color: #d33;
+  font-size: 2.2rem;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.card {
+  background: white;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  width: 260px;
+  padding-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-7px);
+}
+
+.card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+}
+
+.card h3 {
+  margin: 0.8rem 0 0.3rem;
+  color: #d33;
+}
+
+.card p {
+  padding: 0 1rem;
+  font-size: 0.95rem;
+  color: #555;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.price {
+  font-weight: 700;
+  margin: 0.6rem 0;
+  color: #222;
+}
+
+.btn-order {
+  background-color: #d33;
+  border: none;
+  color: white;
+  padding: 0.5rem 1.1rem;
+  font-weight: 700;
+  border-radius: 5px;
+  margin-bottom: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-order:hover {
+  background-color: #b22;
+}
+
+/* О нас */
+#about {
+  max-width: 800px;
+  margin: 3rem auto 4rem;
+  background: #fff0f0;
+  border-radius: 10px;
+  padding: 2rem;
+  color: #333;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+/* Контакты */
+#contact {
+  max-width: 500px;
+  margin: 3rem auto 4rem;
+  background: #fff0f0;
+  border-radius: 10px;
+  padding: 2rem;
+  text-align: center;
+}
+
+#contact p {
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+#contact form input {
+  width: 100%;
+  padding: 0.7rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+#contact form button {
+  width: 100%;
+  padding: 0.7rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 6px;
+  background-color: #d33;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#contact form button:hover {
+  background-color: #b22;
+}
+
+/* Модальные окна */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background: white;
+  padding: 1.5rem 2rem;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 480px;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.hidden {
+  display: none;
+}
+
+.close {
+  position: absolute;
+  top: 0.5rem;
+  right: 1rem;
+  font-size: 2rem;
+  color: #aaa;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.close:hover {
+  color: #d33;
+}
+
+/* Корзина */
+#cart-items {
+  margin: 1rem 0;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding: 0.4rem 0;
+}
+
+.cart-item button {
+  background: none;
+  border: none;
+  color: #d33;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.cart-total {
+  font-weight: 700;
+  text-align: right;
+  margin-bottom: 1rem;
+}
+
+Sergey Esc, [04.07.2025 21:39]
+/* Формы в модалках */
+#register-form input,
+#order-form input,
+#order-form textarea {
+  width: 100%;
+  padding: 0.7rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+#register-form button,
+#order-form button {
+  width: 100%;
+  padding: 0.7rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 6px;
+  background-color: #d33;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#register-form button:hover,
+#order-form button:hover {
+  background-color: #b22;
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+  .cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  nav ul {
+    flex-wrap: wrap;
+  }
+}
+js/script.js
+js
+Копировать
+Редактировать
+// Данные меню (пример)
+const menuData = [
+  {
+    id: 1,
+    name: "Филадельфия",
+    description: "Ролл с лососем, сливочным сыром и авокадо.",
+    price: 450,
+    img: "images/sushi1.jpg",
+  },
+  {
+    id: 2,
+    name: "Калифорния",
+    description: "Ролл с крабовым мясом, огурцом и икрой тобико.",
+    price: 420,
+    img: "images/sushi2.jpg",
+  },
+  {
+    id: 3,
+    name: "Дракон",
+    description: "Ролл с угрем, авокадо и огурцом.",
+    price: 500,
+    img: "images/sushi3.jpg",
+  },
+  {
+    id: 4,
+    name: "Тунца маки",
+    description: "Ролл с тунцом и рисом в нори.",
+    price: 390,
+    img: "images/sushi4.jpg",
+  },
+  {
+    id: 5,
+    name: "Острый ролл",
+    description: "Ролл с острым соусом и креветками.",
+    price: 480,
+    img: "images/sushi5.jpg",
+  },
+  {
+    id: 6,
+    name: "Сет 'Ассорти'",
+    description: "Большой набор из 30 штук разных роллов.",
+    price: 1200,
+    img: "images/sushi6.jpg",
+  },
+  {
+    id: 7,
+    name: "Маки с огурцом",
+    description: "Классический ролл с огурцом.",
+    price: 320,
+    img: "images/sushi7.jpg",
+  },
+  {
+    id: 8,
+    name: "Ролл с креветкой",
+    description: "Ролл с жареной креветкой и майонезом.",
+    price: 460,
+    img: "images/sushi8.jpg",
+  },
+  {
+    id: 9,
+    name: "Вегетарианский ролл",
+    description: "Ролл с авокадо, огурцом и сладким перцем.",
+    price: 350,
+    img: "images/sushi9.jpg",
+  },
+  {
+    id: 10,
+    name: "Суши с лососем",
+    description: "Классические суши с ломтиком лосося.",
+    price: 400,
+    img: "images/sushi10.jpg",
+  },
+];
+
+// Переменные для элементов
+const menuContainer = document.getElementById("menu-items");
+const cartBtn = document.getElementById("btn-cart");
+const cartModal = document.getElementById("cart-modal");
+const closeCartBtn = document.getElementById("close-cart");
+const cartItemsContainer = document.getElementById("cart-items");
+const cartCount = document.getElementById("cart-count");
+const cartTotal = document.getElementById("cart-total");
+const btnRegister = document.getElementById("btn-register");
+const registerModal = document.getElementById("register-modal");
+const closeRegisterBtn = document.getElementById("close-register");
+const registerForm = document.getElementById("register-form");
+const orderModal = document.getElementById("order-modal");
+const closeOrderBtn = document.getElementById("close-order");
+const btnOrder = document.getElementById("btn-order");
+const orderForm = document.getElementById("order-form");
+const contactForm = document.getElementById("contact-form");
+
+// Корзина — массив с выбранными товарами
+let cart = [];
+
+// Отрисовка меню на странице
+function renderMenu() {
+  menuData.forEach((item) => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = 
+      <img src="${item.img}" alt="${item.name}" />
+      <h3>${item.name}</h3>
+      <p>${item.description}</p>
+      <div class="price">${item.price} ₽</div>
+      <button class="btn-order" data-id="${item.id}">Добавить в корзину</button>
+    ;
+
+    menuContainer.appendChild(card);
+  });
+}
+
+// Добавление товара в корзину
+function addToCart(id) {
+  const product = menuData.find((item) => item.id === id);
+  if (!product) return;
+
+Sergey Esc, [04.07.2025 21:39]
+const cartItem = cart.find((item) => item.id === id);
+  if (cartItem) {
+    cartItem.qty += 1;
+  } else {
+    cart.push({ ...product, qty: 1 });
+  }
+  updateCartUI();
+}
+
+// Удаление товара из корзины
+function removeFromCart(id) {
+  cart = cart.filter((item) => item.id !== id);
+  updateCartUI();
+}
+
+// Обновление отображения корзины
+function updateCartUI() {
+  cartItemsContainer.innerHTML = "";
+  let total = 0;
+  cart.forEach((item) => {
+    total += item.price * item.qty;
+    const div = document.createElement("div");
+    div.className = "cart-item";
+    div.innerHTML = 
+      <span>${item.name} x${item.qty}</span>
+      <span>${item.price * item.qty} ₽</span>
+      <button data-id="${item.id}">&times;</button>
+    ;
+    cartItemsContainer.appendChild(div);
+
+    // Кнопка удаления товара
+    div.querySelector("button").addEventListener("click", () => {
+      removeFromCart(item.id);
+    });
+  });
+  cartTotal.textContent = total;
+  cartCount.textContent = cart.reduce((sum, item) => sum + item.qty, 0);
+}
+
+// Показать корзину
+function showCart() {
+  updateCartUI();
+  cartModal.classList.remove("hidden");
+}
+
+// Скрыть корзину
+function hideCart() {
+  cartModal.classList.add("hidden");
+}
+
+// Плавный скролл к секции
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth" });
+  }
+}
+
+// Показать регистрацию
+function showRegister() {
+  registerModal.classList.remove("hidden");
+}
+
+// Скрыть регистрацию
+function hideRegister() {
+  registerModal.classList.add("hidden");
+}
+
+// Показать форму заказа
+function showOrder() {
+  if (cart.length === 0) {
+    alert("Корзина пуста, добавьте товары!");
+    return;
+  }
+  orderModal.classList.remove("hidden");
+}
+
+// Скрыть форму заказа
+function hideOrder() {
+  orderModal.classList.add("hidden");
+}
+
+// Обработчики событий
+
+// При загрузке страницы
+document.addEventListener("DOMContentLoaded", () => {
+  renderMenu();
+
+  // Добавление товара по кнопке
+  document.getElementById("menu-items").addEventListener("click", (e) => {
+    if (e.target.classList.contains("btn-order")) {
+      const id = +e.target.dataset.id;
+      addToCart(id);
+    }
+  });
+
+  // Открыть корзину
+  cartBtn.addEventListener("click", showCart);
+  closeCartBtn.addEventListener("click", hideCart);
+
+  // Открыть и закрыть регистрацию
+  btnRegister.addEventListener("click", showRegister);
+  closeRegisterBtn.addEventListener("click", hideRegister);
+
+  // Отправка формы регистрации (просто вывод в консоль)
+  registerForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    alert("Спасибо за регистрацию!");
+    registerForm.reset();
+    hideRegister();
+  });
+
+  // Открыть и закрыть окно заказа
+  btnOrder.addEventListener("click", () => {
+    hideCart();
+    showOrder();
+  });
+  closeOrderBtn.addEventListener("click", hideOrder);
+
+  // Отправка формы заказа
+  orderForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    alert("Заказ принят! Спасибо!");
+    orderForm.reset();
+    cart = [];
+    updateCartUI();
+    hideOrder();
+  });
+
+  // Обработка формы контактов (тоже просто alert)
+  contactForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    alert("Спасибо за заявку, мы скоро свяжемся с вами!");
+    contactForm.reset();
+  });
+
+  // Плавный скролл по меню
+  document.querySelectorAll(".nav-link").forEach((link) => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute("href").substring(1);
+      scrollToSection(targetId);
+    });
+  });
+});
+Картинки
+Для картинок нужно добавить около 10-15 фото суши в папку /images/ (вместо hero-bg.jpg, sushi1.jpg, sushi2.jpg и т.д.). Можешь взять любые из интернета, главное — правильно назвать и положить в папку images.
+
+Что делать дальше?
+Создаёшь папку для сайта.
+
+Внутри создаёшь подпапки css, js, images.
+
+Копируешь туда файлы:
+
+index.html — в корень папки сайта
+
+css/style.css — в папку css
+
+js/script.js — в папку js
+
+Загружаешь картинки в папку images
+
+Открываешь index.html в браузере — сайт должен заработать с нужным функционалом.
